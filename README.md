@@ -1,8 +1,10 @@
 # 📚 Sistema de Biblioteca
 
-Sistema de gerenciamento de biblioteca desenvolvido em **Java** utilizando os conceitos de **Programação Orientada a Objetos (POO)**.
+Sistema de gerenciamento de biblioteca desenvolvido em **C++** utilizando os princípios da **Programação Orientada a Objetos (POO)**.
 
-O projeto permite o cadastro e gerenciamento de livros, usuários, empréstimos e reservas, simulando o funcionamento básico de uma biblioteca acadêmica.
+O objetivo do projeto é simular as principais operações de uma biblioteca, permitindo o gerenciamento de livros, usuários, empréstimos e reservas.
+
+---
 
 ## 🚀 Funcionalidades
 
@@ -17,70 +19,44 @@ O projeto permite o cadastro e gerenciamento de livros, usuários, empréstimos 
 - Cadastro de alunos
 - Cadastro de professores
 - Consulta de usuários
-- Controle de status do usuário
+- Controle de status dos usuários
 
 ### 🔄 Empréstimos
 - Realização de empréstimos
-- Controle de devoluções
-- Consulta de empréstimos ativos
-- Histórico de empréstimos
+- Registro de devoluções
+- Controle de empréstimos ativos
 
 ### 📌 Reservas
 - Criação de reservas
-- Gerenciamento de filas de espera
-- Controle de itens reservados
+- Gerenciamento de itens reservados
+- Controle de disponibilidade
 
 ### 📚 Acervo
 - Organização dos livros cadastrados
-- Controle de disponibilidade dos exemplares
+- Consulta de exemplares disponíveis
 
 ---
 
 ## 🏗️ Estrutura do Projeto
 
 ```
-Sistema-de-Biblioteca
+Sistema-de-Biblioteca/
 │
 ├── Livro/
-│   └── Livro.java
-│
-├── Autor/
-│   └── Autor.java
-│
-├── Editora/
-│   └── Editora.java
-│
-├── Endereco/
-│   └── Endereco.java
-│
+├── autor/
+├── editora/
+├── endereco/
 ├── Usuario/
-│   ├── Usuario.java
-│   ├── Aluno.java
-│   └── Professor.java
-│
-├── ExemplarLivro/
-│   ├── ExemplarLivro.java
-│   └── StatusEmprestimo.java
-│
-├── Emprestimo/
-│   ├── Emprestimo.java
-│   └── ItemEmprestimo.java
-│
+├── StatusUsuario/
+├── emp/
 ├── Reserva/
-│   ├── Reserva.java
-│   └── ItemReserva.java
-│
-├── Acervo/
-│   └── Acervo.java
-│
+├── acervo/
+├── menu/
 ├── Gerenciadores/
-│   ├── GerenciadorCadastro.java
-│   └── GerenciadorEmprestimos.java
+├── itemEmp/
+├── ExemplarLivro/
 │
-├── Menu/
-│   └── Menu.java
-│
-└── Main.java
+└── main.cpp
 ```
 
 ---
@@ -92,11 +68,11 @@ Sistema-de-Biblioteca
 - Polimorfismo
 - Abstração
 - Composição
-- Associação entre classes
+- Associação entre objetos
 
-### Exemplo de Herança
+### Hierarquia de Usuários
 
-```java
+```
 Usuario
 ├── Aluno
 └── Professor
@@ -104,21 +80,23 @@ Usuario
 
 ---
 
-## ⚙️ Como Compilar
+## ⚙️ Compilação
 
 Na pasta raiz do projeto execute:
 
 ```bash
-g++ main.cpp Livro/Livro.cpp Autor/Autor.cpp Editora/Editora.cpp Endereco/Endereco.cpp Usuario/Usuario.cpp StatusUsuario/StatusUsuario.cpp Emprestimo/Emprestimo.cpp Reserva/Reserva.cpp Reserva/ItemReserva.cpp Acervo/Acervo.cpp Menu/Menu.cpp Gerenciadores/GerenciadorCadastro.cpp Gerenciadores/GerenciadorEmprestimos.cpp ItemEmprestimo/ItemEmprestimo.cpp ExemplarLivro/ExemplarLivro.cpp ExemplarLivro/StatusEmprestimo.cpp Usuario/Aluno.cpp Usuario/Professor.cpp -o main
+g++ main.cpp Livro/Livro.cpp autor/Autor.cpp editora/Editora.cpp endereco/Endereco.cpp Usuario/Usuario.cpp StatusUsuario/StatusUsuario.cpp emp/Emprestimo.cpp Reserva/Reserva.cpp Reserva/ItemReserva.cpp acervo/Acervo.cpp menu/menu.cpp Gerenciadores/GerenciadorCadastro.cpp Gerenciadores/GerenciadorEmprestimos.cpp itemEmp/ItemEmprestimo.cpp ExemplarLivro/ExemplarLivro.cpp ExemplarLivro/StatusEmprestimo.cpp Usuario/Aluno.cpp Usuario/Professor.cpp -o main
 ```
 
-Executar:
+### Executar
+
+Linux/Mac:
 
 ```bash
 ./main
 ```
 
-No Windows:
+Windows:
 
 ```bash
 main.exe
@@ -126,35 +104,42 @@ main.exe
 
 ---
 
-## 🖥️ Exemplo de Uso
-
-1. Cadastrar usuário
-2. Cadastrar livro
-3. Consultar acervo
-4. Realizar empréstimo
-5. Registrar devolução
-6. Realizar reserva
-
----
-
 ## 📋 Regras de Negócio
 
-- Um livro só pode ser emprestado se houver exemplar disponível.
-- Usuários podem possuir empréstimos ativos.
-- Reservas são registradas quando não há exemplares disponíveis.
-- Alunos e professores podem possuir regras de empréstimo distintas.
+- Apenas exemplares disponíveis podem ser emprestados.
+- Um empréstimo está associado a um usuário e a um ou mais exemplares.
+- Reservas podem ser realizadas para livros indisponíveis.
+- Alunos e professores possuem tipos distintos de usuário.
+- O sistema mantém o controle do status dos exemplares.
 
 ---
 
-## 👨‍💻 Desenvolvedor
+## 🛠️ Tecnologias Utilizadas
 
-**S3VL4**
+- C++
+- Programação Orientada a Objetos
+- Compilador G++
 
-GitHub:
-https://github.com/sevla7
+---
+
+## 🎯 Objetivos Acadêmicos
+
+Este projeto foi desenvolvido com o objetivo de praticar:
+
+- Modelagem orientada a objetos
+- Organização de projetos em múltiplos arquivos
+- Separação entre interface (.h) e implementação (.cpp)
+- Relacionamento entre classes
+- Gerenciamento de empréstimos e reservas
+
+---
+
+## 👨‍💻 Autor
+
+GitHub: :contentReference[oaicite:0]{index=0}
 
 ---
 
 ## 📄 Licença
 
-Projeto desenvolvido para fins acadêmicos e de aprendizado em Programação Orientada a Objetos.
+Projeto desenvolvido para fins acadêmicos e de estudo.
