@@ -15,10 +15,13 @@
 #include "Usuario/Aluno.h"
 #include "Usuario/Professor.h"
 #include "Menu/menu.h"
+#include <locale>
 using namespace std;
 
 
 int main() {
+    setlocale(LC_ALL, "Portuguese_Brazil");
+
     vector<Reserva*> reservas;
 
     int opcao;
