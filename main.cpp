@@ -15,14 +15,15 @@
 #include "Usuario/Aluno.h"
 #include "Usuario/Professor.h"
 #include "Menu/menu.h"
-#include <locale>
+#include <locale.h>
+#include <windows.h>
 using namespace std;
 
 
 int main() {
-    setlocale(LC_ALL, "pt_BR.UTF-8");
-
     vector<Reserva*> reservas;
+    SetConsoleOutputCP(65001);
+    setlocale(LC_ALL, "Portuguese_Brazil");
 
     int opcao;
 
@@ -55,32 +56,32 @@ int main() {
             case 1: {
                 int c; //codigo
                 string t; //titulo
-                int e; //edi�§�£o
-                float p; //pre�§o
+                int e; //edição
+                float p; //preço
                 int a; //ano
                 int qtdExe; //quantidade de exemplares
                 int pag; //numero de paginas
                 int idEditora;
                 int diasEmp = 7; // Default value for days of loan
 
-                cout << "Digite o c�³digo." << endl;
+                cout << "Digite o código." << endl;
                 cin >> c;
 
-                cout << "Digite o t�­tulo." << endl;
+                cout << "Digite o título." << endl;
                 cin.ignore();
                 getline(cin, t);
 
-                cout << "Digite a edi�§�£o." << endl;
+                cout << "Digite a edição." << endl;
                 cin >> e;
 
-                cout << "Digite o pre�§o." << endl;
+                cout << "Digite o preço." << endl;
                 cin >> p;
 
                 cout << "Digite o id da editora." << endl;
                 cin >> idEditora;
                 Editora* editora = GerenciadorCadastro::verificaEditora(idEditora);
                 if (editora == nullptr) {
-                    cout << "\n[ERRO] Editora n�£o encontrada! Cadastre a editora primeiro.\n";
+                    cout << "\n[ERRO] Editora não encontrada! Cadastre a editora primeiro.\n";
                     break;
                 }
 
@@ -90,7 +91,7 @@ int main() {
                 cout << "Quantidade de exemplares." << endl;
                 cin >> qtdExe;
 
-                // --- L�GICA DE AUTORES ---
+                // --- LÓGICA DE AUTORES ---
                 vector<Autor*> autoresDoLivro;
                 int qtdAutores;
                 cout << "Quantos autores tem o livro? ";
@@ -105,23 +106,23 @@ int main() {
                     if(aut != nullptr) {
                         autoresDoLivro.push_back(aut);
                     } else {
-                        cout << "Autor com ID " << idAutor << " n�£o encontrado!" << endl;
+                        cout << "Autor com ID " << idAutor << " não encontrado!" << endl;
                         falhaAutor = true;
                         break; // Sai do loop se algum autor falha
                     }
                 }
 
-                if (falhaAutor || autoresDoLivro.empty()) { // Checa se algum autor falhou ou se n�£o tem autores
-                    cout << "\nLivro n�£o cadastrado: � necess�Ħrio pelo menos um autor v�Ħlido.\n";
+                if (falhaAutor || autoresDoLivro.empty()) { // Checa se algum autor falhou ou se não tem autores
+                    cout << "\nLivro não cadastrado: É necessário pelo menos um autor válido.\n";
                     break; // Sai do case 1
                 }
 
 
-                cout << "N�şmero de p�Ħginas." << endl;
+                cout << "Número de páginas." << endl;
                 cin >> pag;
 
                 Livro* livro = new Livro(c, t, e, p, *editora, a, 0, diasEmp, autoresDoLivro, 1, 1, pag);
-                // quantidadeExemplares inicializa em 0, �İ atualizado por Acervo::criarExemplaresParaLivro
+                // quantidadeExemplares inicializa em 0, é atualizado por Acervo::criarExemplaresParaLivro
 
                 Acervo::acrecentarLivro(livro);
 
@@ -139,7 +140,7 @@ int main() {
                 cin >> idAutor;
                 Autor* aut = GerenciadorCadastro::verificaAutor(idAutor);
                     if(aut != nullptr) {
-                        cout << "Autor com ID " << idAutor << " j�Ħ existe!" << endl;
+                        cout << "Autor com ID " << idAutor << " já existe!" << endl;
                         break; // Sai do loop se algum autor falha
                     } else {
                         Autor autor_obj = cadastraAutor(idAutor);
@@ -157,8 +158,8 @@ int main() {
                 cin >> idUsuario;
                 Usuario* user = GerenciadorCadastro::verificaUsuario(idUsuario);
                     if(user != nullptr) {
-                        cout << "Usu�Ħrio com ID " << idUsuario << " j�Ħ existe!" << endl;
-                        break; // Sai do loop se algum usu�Ħrio falha
+                        cout << "Usuário com ID " << idUsuario << " já existe!" << endl;
+                        break; // Sai do loop se algum usuário falha
                     } else {
                         Aluno aluno_obj = cadastraAluno(idUsuario);
                         Aluno* aluno = new Aluno(aluno_obj);
@@ -177,8 +178,8 @@ int main() {
                 cin >> idUsuario;
                 Usuario* user = GerenciadorCadastro::verificaUsuario(idUsuario);
                 if(user != nullptr) {
-                    cout << "Usu�Ħrio com ID " << idUsuario << " j�Ħ existe!" << endl;
-                    break; // Sai do loop se algum usu�Ħrio falha
+                    cout << "Usuário com ID " << idUsuario << " já existe!" << endl;
+                    break; // Sai do loop se algum usuário falha
                 }
                 else {
                   Professor professor_obj = cadastraProfessor(idUsuario);
@@ -197,7 +198,7 @@ int main() {
                 cin >> idEditora;
                 Editora* editora = GerenciadorCadastro::verificaEditora(idEditora);
                 if(editora != nullptr) {
-                    cout << "Editora com ID " << idEditora << " j�Ħ existe!" << endl;
+                    cout << "Editora com ID " << idEditora << " já existe!" << endl;
                     break; // Sai do loop se alguma editora falha
                 }
                 else {
@@ -294,7 +295,7 @@ int main() {
                 break;
             }
             else {
-              cout << "Usu�Ħrio: " << usuario->getNome()  << endl;
+              cout << "Usuário: " << usuario->getNome()  << endl;
             }
 
             cout << "Codigo do livro: ";
@@ -481,7 +482,7 @@ int main() {
             case 6:
             {
                 int id;
-                cout << "\nDigite o ID do usu�Ħrio: ";
+                cout << "\nDigite o ID do usuário: ";
                 cin >> id;
                 GerenciadorEmprestimos::listarEmprestimosPorUsuario(id);
                 break;
@@ -514,7 +515,7 @@ int main() {
 
     } while(opcao != 7); 
 
-    // Libera�§�£o de mem�³ria
+    // Liberação de memória
 
     for(Autor* autor : GerenciadorCadastro::getAutores()) delete autor; 
 
