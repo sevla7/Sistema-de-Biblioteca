@@ -16,9 +16,11 @@
 #include "Usuario/Professor.h"
 #include "Menu/menu.h"
 #include <locale.h>
-#include <windows.h> 
+#include <windows.h>
+#include <iostream>
+#include <vector>
 #include <limits>
-#include <stdexcept> 
+#include <stdexcept>
 
 using namespace std;
 
@@ -52,13 +54,15 @@ string getSafeStringInput() {
 
 int main() {
     vector<Reserva*> reservas;
+    SetConsoleOutputCP(65001);
+    setlocale(LC_ALL, "Portuguese_Brazil");
+
     int opcao;
 
     do {
         exibirMenu();
         opcao = getSafeIntegerInput();
 
-        // O bloco TRY envolve os switches. Qualquer THROW aqui dentro será capturado pelo CATCH no fim do loop.
         try {
             switch(opcao) {
 
@@ -78,47 +82,40 @@ int main() {
 
                 switch(opcCadastro) {
 
-                case 1: {
-                    int c; //codigo
-                    string t; //titulo
-                    int e; //edição
-                    float p; //preço
-                    int a; //ano
-                    int qtdExe; //quantidade de exemplares
-                    int pag; //numero de paginas
-                    int idEditora;
+                case 1: { // CADASTRAR LIVRO
+                    int c, e, a, qtdExe, pag, idEditora;
+                    string t;
+                    float p;
                     int diasEmp = 7; 
 
-                    cout << "Digite o código." << endl;
+                    cout << "Digite o código: " << endl;
                     c = getSafeIntegerInput();
 
                     if (Acervo::buscarLivro(c) != nullptr) {
                         throw runtime_error("[ERRO] Livro com o código fornecido já existe!");
                     }
 
-                    cout << "Digite o título." << endl;
+                    cout << "Digite o título: " << endl;
                     t = getSafeStringInput();
-                    if (Acervo::buscarLivroPorTitulo(t) != nullptr) {
-                        throw runtime_error("[ERRO] Livro com esse título já existe!");
-                    }
 
-                    cout << "Digite a edição." << endl;
+                    cout << "Digite a edição: " << endl;
                     e = getSafeIntegerInput();
 
-                    cout << "Digite o preço." << endl;
+                    cout << "Digite o preço: " << endl;
                     p = getSafeFloatInput();
 
-                    cout << "Digite o id da editora." << endl;
+                    cout << "Digite o id da editora: " << endl;
                     idEditora = getSafeIntegerInput();
+                    
                     Editora* editora = GerenciadorCadastro::verificaEditora(idEditora);
                     if (editora == nullptr) {
                         throw runtime_error("[ERRO] Editora não encontrada! Cadastre a editora primeiro.");
                     }
 
-                    cout << "Digite o ano." << endl;
+                    cout << "Digite o ano: " << endl;
                     a = getSafeIntegerInput();
 
-                    cout << "Quantidade de exemplares." << endl;
+                    cout << "Quantidade de exemplares: " << endl;
                     qtdExe = getSafeIntegerInput();
 
                     // --- LÓGICA DE AUTORES ---
@@ -140,10 +137,10 @@ int main() {
                     }
 
                     if (autoresDoLivro.empty()) { 
-                        throw runtime_error("[ERRO] Livro não cadastrado: É necessário pelo menos um autor válido.");
+                        throw runtime_error("[ERRO] É necessário pelo menos um autor válido para cadastrar o livro.");
                     }
 
-                    cout << "Número de páginas." << endl;
+                    cout << "Número de páginas: " << endl;
                     pag = getSafeIntegerInput();
 
                     Livro* livro = new Livro(c, t, e, p, *editora, a, 0, diasEmp, autoresDoLivro, 1, 1, pag);
@@ -154,101 +151,76 @@ int main() {
                     break;
                 }
 
-                case 2: {
+                case 2: { // CADASTRAR AUTOR
                     int idAutor;
-                    string nomeAutor;
                     cout << "Digite o ID do autor: ";
                     idAutor = getSafeIntegerInput();
                     
-                    if(GerenciadorCadastro::verificaAutor(idAutor) != nullptr) {
-                        throw runtime_error("[ERRO] Autor com este ID já existe!");
-                    }
+                    Autor* aut = GerenciadorCadastro::verificaAutor(idAutor);
+                    if(aut != nullptr) {
+                        throw runtime_error("[ERRO] Autor com o ID informado já existe!");
+                    } 
                     
-                    cout << "Digite o nome do autor: ";
-                    nomeAutor = getSafeStringInput();
-                    
-                    if(GerenciadorCadastro::buscarAutorPorNome(nomeAutor) != nullptr) {
-                        throw runtime_error("[ERRO] Autor com este nome já existe!");
-                    }
-                    
-                    Autor autor_obj = cadastraAutor(idAutor, nomeAutor);
+                    Autor autor_obj = cadastraAutor(idAutor);
                     Autor* autor = new Autor(autor_obj);
-                    GerenciadorCadastro::adicionarAutor(autor);
+                    GerenciadorCadastro::adicionarAutor(autor); 
                     cout << "\nAutor cadastrado com sucesso!\n";
                     break;
                 }
 
-                case 3: {
+                case 3: { // CADASTRAR ALUNO
                     int idUsuario;
-                    string nomeUsuario;
                     cout << "Digite o ID do aluno: ";
                     idUsuario = getSafeIntegerInput();
                     
-                    if(GerenciadorCadastro::verificaUsuario(idUsuario) != nullptr) {
-                        throw runtime_error("[ERRO] Usuário com este ID já existe!");
-                    }
-                    cout << "Digite o nome do aluno: ";
-                    nomeUsuario = getSafeStringInput();
-
-                    if(GerenciadorCadastro::buscarUsuarioPorNome(nomeUsuario) != nullptr) {
-                        throw runtime_error("[ERRO] Usuário com este nome já existe!");
-                    }
-                    Aluno aluno_obj = cadastraAluno(idUsuario, nomeUsuario);
+                    Usuario* user = GerenciadorCadastro::verificaUsuario(idUsuario);
+                    if(user != nullptr) {
+                        throw runtime_error("[ERRO] Usuário com o ID informado já existe!");
+                    } 
+                    
+                    Aluno aluno_obj = cadastraAluno(idUsuario);
                     Aluno* aluno = new Aluno(aluno_obj);
-                    GerenciadorCadastro::adicionarUsuario(aluno);
-
-                    cout << "Aluno cadastrado!" << endl;
+                    GerenciadorCadastro::adicionarUsuario(aluno); 
+                    cout << "Aluno cadastrado com sucesso!" << endl;
                     break;
                 }
 
-                case 4: {
+                case 4: { // CADASTRAR PROFESSOR
                     int idUsuario;
-                    string nomeUsuario;
                     cout << "Digite o ID do professor: ";
                     idUsuario = getSafeIntegerInput();
                     
-                    if(GerenciadorCadastro::verificaUsuario(idUsuario) != nullptr) {
-                        throw runtime_error("[ERRO] Usuário com este ID já existe!");
+                    Usuario* user = GerenciadorCadastro::verificaUsuario(idUsuario);
+                    if(user != nullptr) {
+                        throw runtime_error("[ERRO] Usuário com o ID informado já existe!");
                     }
-                    cout << "Digite o nome do professor: ";
-                    nomeUsuario = getSafeStringInput();
                     
-                    if(GerenciadorCadastro::buscarUsuarioPorNome(nomeUsuario) != nullptr) {
-                        throw runtime_error("[ERRO] Usuário com este nome já existe!");
-                    }
-                    Professor professor_obj = cadastraProfessor(idUsuario, nomeUsuario); 
+                    Professor professor_obj = cadastraProfessor(idUsuario);
                     Professor* professor = new Professor(professor_obj);
-                    GerenciadorCadastro::adicionarUsuario(professor);
-
-                    cout << "Professor cadastrado!" << endl;
+                    GerenciadorCadastro::adicionarUsuario(professor); 
+                    cout << "Professor cadastrado com sucesso!" << endl;
                     break;
                 }
 
-                case 5: {
+                case 5: { // CADASTRAR EDITORA
                     int idEditora;
-                    string nomeEditora;
                     cout << "Digite o ID da editora: ";
                     idEditora = getSafeIntegerInput();
                     
-                    if(GerenciadorCadastro::verificaEditora(idEditora) != nullptr) {
-                        throw runtime_error("[ERRO] Editora com este ID já existe!");
+                    Editora* editora = GerenciadorCadastro::verificaEditora(idEditora);
+                    if(editora != nullptr) {
+                        throw runtime_error("[ERRO] Editora com o ID informado já existe!");
                     }
-                    cout << "Digite o nome da editora: ";
-                    nomeEditora = getSafeStringInput();
                     
-                    if(GerenciadorCadastro::buscarEditoraPorNome(nomeEditora) != nullptr) {
-                        throw runtime_error("[ERRO] Editora com este nome já existe!");
-                    }
-                    Editora editora_obj = cadastraEditora(idEditora, nomeEditora);
-                    Editora* editora = new Editora(editora_obj);
-                    GerenciadorCadastro::adicionarEditora(editora);
-
+                    Editora editora_obj = cadastraEditora(idEditora);
+                    Editora* novaEditora = new Editora(editora_obj);
+                    GerenciadorCadastro::adicionarEditora(novaEditora); 
                     cout << "\nEditora cadastrada com sucesso!\n";
                     break;
                 }
 
                 default:
-                    cout << "\nOpcao invalida!" << endl;
+                    cout << "\nOpção inválida no menu de cadastro!" << endl;
                 }
                 break;
             }
@@ -433,7 +405,6 @@ int main() {
             }
 
         } 
-        // CAPTURA DOS ERROS LANÇADOS PELO THROW
         catch (const runtime_error& e) {
             cout << "\n----------------------------------------" << endl;
             cout << e.what() << endl;
@@ -444,9 +415,9 @@ int main() {
     } while(opcao != 7);
 
     // Liberação de memória
-    for(Autor* autor : GerenciadorCadastro::getAutores()) delete autor;
-    for(Usuario* usuario : GerenciadorCadastro::getUsuarios()) delete usuario;
-    for(Editora* editora : GerenciadorCadastro::getEditoras()) delete editora;
+    for(Autor* autor : GerenciadorCadastro::getAutores()) delete autor; 
+    for(Usuario* usuario : GerenciadorCadastro::getUsuarios()) delete usuario; 
+    for(Editora* editora : GerenciadorCadastro::getEditoras()) delete editora; 
     for(Livro* livro : Acervo::getListaLivros()) delete livro;
     for(ExemplarLivro* exemplar : Acervo::getListaExemplares()) delete exemplar;
     for(Reserva* reserva : reservas) delete reserva;
