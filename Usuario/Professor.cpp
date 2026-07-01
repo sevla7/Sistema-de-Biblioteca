@@ -50,9 +50,6 @@ void Professor::exibirInformacoes() const {
 Professor cadastraProfessor(int idProf, string nome) {
 
     Professor p;
-
-    // int id; // Removed redundant local variable
-    string nome;
     string departamento;
     int qtdTurmas;
 
