@@ -52,6 +52,7 @@ string getSafeStringInput() {
 
 int main() {
     vector<Reserva*> reservas;
+
     int opcao;
 
     do {
