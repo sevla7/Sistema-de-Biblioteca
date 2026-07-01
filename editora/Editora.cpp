@@ -50,7 +50,6 @@ Editora::~Editora() {}
 
 Editora cadastraEditora(int idEditora, string nome) {
     Editora e;
-    string nome;
     string rua, bairro, cidade, estado, cep;
     int numero;
 
