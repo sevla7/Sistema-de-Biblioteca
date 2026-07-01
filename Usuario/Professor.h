@@ -28,6 +28,6 @@ public:
     void exibirInformacoes() const override;
 };
 
-Professor cadastraProfessor(int idProf);
+Professor cadastraProfessor(int idProf, string nome);
 
 #endif

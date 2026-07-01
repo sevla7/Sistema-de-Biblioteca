@@ -44,20 +44,13 @@ void Aluno::exibirInformacoes() const {
          << endl;
 }
 
-Aluno cadastraAluno(int idAluno) {
+Aluno cadastraAluno(int idAluno, string nome) {
 
     Aluno a;
-
-    // int id; // Removed redundant local variable
-    string nome;
     string RA;
     string dep;
 
     a.setID(idAluno); // Use the provided idAluno
-
-    cout << "Digite o nome: ";
-    cin.ignore();
-    getline(cin, nome);
     a.setNome(nome);
 
     cout << "Digite o RA: ";

@@ -51,6 +51,33 @@ Usuario* GerenciadorCadastro::verificaUsuario(int idBuscado) {
     return nullptr;
 }
 
+Autor* GerenciadorCadastro::buscarAutorPorNome(const std::string& nomeBuscado) {
+    for (Autor* autor : autores) {
+        if (autor->getNome() == nomeBuscado) {
+            return autor;
+        }
+    }
+    return nullptr;
+}
+
+Editora* GerenciadorCadastro::buscarEditoraPorNome(const std::string& nomeBuscado) {
+    for (Editora* editora : editoras) {
+        if (editora->getNome() == nomeBuscado) {
+            return editora;
+        }
+    }
+    return nullptr;
+}
+
+Usuario* GerenciadorCadastro::buscarUsuarioPorNome(const std::string& nomeBuscado) {
+    for (Usuario* usuario : usuarios) {
+        if (usuario->getNome() == nomeBuscado) {
+            return usuario;
+        }
+    }
+    return nullptr;
+}
+
 void GerenciadorCadastro::adicionarEditora(Editora* editora) {
     GerenciadorCadastro::editoras.push_back(editora);
 }
