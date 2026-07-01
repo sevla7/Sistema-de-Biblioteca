@@ -37,15 +37,10 @@ void Autor::setCodigo(const int c) {
     this->codigo = c;
 }
 
-Autor cadastraAutor(int cod) {
+Autor cadastraAutor(int cod, string nome) {
     Autor a;
-    string nome;
     // int codigo; // Removed redundant local variable
-    a.setCodigo(cod); // Use the provided 'cod' parameter
-
-    cout << "Digite o nome do autor: ";
-    cin.ignore();
-    getline(cin, nome);
+    a.setCodigo(cod); 
     a.setNome(nome);
 
     return a;

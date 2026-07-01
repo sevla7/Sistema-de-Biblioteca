@@ -17,8 +17,40 @@
 #include "Menu/menu.h"
 #include <locale.h>
 #include <windows.h>
+#include <iostream>
+#include <vector>
+#include <limits>
+#include <stdexcept>
+
 using namespace std;
 
+int getSafeIntegerInput() {
+    int value;
+    while (!(cin >> value)) {
+        cout << "Entrada inválida. Por favor, digite um número: ";
+        cin.clear(); 
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    return value;
+}
+
+float getSafeFloatInput() {
+    float value;
+    while (!(cin >> value)) {
+        cout << "Entrada inválida. Por favor, digite um número decimal: ";
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    return value;
+}
+
+string getSafeStringInput() {
+    string value;
+    getline(cin, value);
+    return value;
+}
 
 int main() {
     vector<Reserva*> reservas;
@@ -28,508 +60,376 @@ int main() {
     int opcao;
 
     do {
-
         exibirMenu();
+        opcao = getSafeIntegerInput();
 
-        cin >> opcao;
+        try {
+            switch(opcao) {
 
-        switch(opcao) {
+            case 1: { // CADASTRO
+                int opcCadastro;
 
-        case 1: { // CADASTRO
+                cout << "\nCADASTRAR\n";
+                cout << "1. Livro\n";
+                cout << "2. Autor\n";
+                cout << "3. Aluno\n";
+                cout << "4. Professor\n";
+                cout << "5. Editora\n";
+                cout << "Opcao: ";
 
-            int opcCadastro;
+                opcCadastro = getSafeIntegerInput();
+                cout << endl;
 
-            cout << "\nCADASTRAR\n";
-            cout << "1. Livro\n";
-            cout << "2. Autor\n";
-            cout << "3. Aluno" << endl;
-            cout << "4. Professor" << endl;
-            cout << "5. Editora\n";
-            cout << "Opcao: ";
+                switch(opcCadastro) {
 
-            cin >> opcCadastro;
+                case 1: { // CADASTRAR LIVRO
+                    int c, e, a, qtdExe, pag, idEditora;
+                    string t;
+                    float p;
+                    int diasEmp = 7; 
 
-            cout << endl;
+                    cout << "Digite o código: " << endl;
+                    c = getSafeIntegerInput();
 
-            switch(opcCadastro) {
+                    if (Acervo::buscarLivro(c) != nullptr) {
+                        throw runtime_error("[ERRO] Livro com o código fornecido já existe!");
+                    }
 
-            case 1: {
-                int c; //codigo
-                string t; //titulo
-                int e; //edição
-                float p; //preço
-                int a; //ano
-                int qtdExe; //quantidade de exemplares
-                int pag; //numero de paginas
-                int idEditora;
-                int diasEmp = 7; // Default value for days of loan
+                    cout << "Digite o título: " << endl;
+                    t = getSafeStringInput();
 
-                cout << "Digite o código." << endl;
-                cin >> c;
+                    cout << "Digite a edição: " << endl;
+                    e = getSafeIntegerInput();
 
-                cout << "Digite o título." << endl;
-                cin.ignore();
-                getline(cin, t);
+                    cout << "Digite o preço: " << endl;
+                    p = getSafeFloatInput();
 
-                cout << "Digite a edição." << endl;
-                cin >> e;
+                    cout << "Digite o id da editora: " << endl;
+                    idEditora = getSafeIntegerInput();
+                    
+                    Editora* editora = GerenciadorCadastro::verificaEditora(idEditora);
+                    if (editora == nullptr) {
+                        throw runtime_error("[ERRO] Editora não encontrada! Cadastre a editora primeiro.");
+                    }
 
-                cout << "Digite o preço." << endl;
-                cin >> p;
+                    cout << "Digite o ano: " << endl;
+                    a = getSafeIntegerInput();
 
-                cout << "Digite o id da editora." << endl;
-                cin >> idEditora;
-                Editora* editora = GerenciadorCadastro::verificaEditora(idEditora);
-                if (editora == nullptr) {
-                    cout << "\n[ERRO] Editora não encontrada! Cadastre a editora primeiro.\n";
+                    cout << "Quantidade de exemplares: " << endl;
+                    qtdExe = getSafeIntegerInput();
+
+                    // --- LÓGICA DE AUTORES ---
+                    vector<Autor*> autoresDoLivro;
+                    int qtdAutores;
+                    cout << "Quantos autores tem o livro? ";
+                    qtdAutores = getSafeIntegerInput();
+
+                    for(int i = 0; i < qtdAutores; i++) {
+                        int idAutor;
+                        cout << "Digite o ID do autor " << (i + 1) << ": ";
+                        idAutor = getSafeIntegerInput();
+                        Autor* aut = GerenciadorCadastro::verificaAutor(idAutor);
+                        
+                        if(aut == nullptr) {
+                            throw runtime_error("[ERRO] Autor com o ID especificado não foi encontrado!");
+                        }
+                        autoresDoLivro.push_back(aut);
+                    }
+
+                    if (autoresDoLivro.empty()) { 
+                        throw runtime_error("[ERRO] É necessário pelo menos um autor válido para cadastrar o livro.");
+                    }
+
+                    cout << "Número de páginas: " << endl;
+                    pag = getSafeIntegerInput();
+
+                    Livro* livro = new Livro(c, t, e, p, *editora, a, 0, diasEmp, autoresDoLivro, 1, 1, pag);
+                    Acervo::acrecentarLivro(livro);
+                    Acervo::criarExemplaresParaLivro(livro, qtdExe);
+
+                    cout << "\nLivro cadastrado com sucesso!\n";
                     break;
                 }
 
-                cout << "Digite o ano." << endl;
-                cin >> a;
-
-                cout << "Quantidade de exemplares." << endl;
-                cin >> qtdExe;
-
-                // --- LÓGICA DE AUTORES ---
-                vector<Autor*> autoresDoLivro;
-                int qtdAutores;
-                cout << "Quantos autores tem o livro? ";
-                cin >> qtdAutores;
-
-                bool falhaAutor = false;
-                for(int i = 0; i < qtdAutores; i++) {
+                case 2: { // CADASTRAR AUTOR
                     int idAutor;
-                    cout << "Digite o ID do autor " << (i + 1) << ": ";
-                    cin >> idAutor;
-                    Autor* aut = GerenciadorCadastro::verificaAutor(idAutor);
-                    if(aut != nullptr) {
-                        autoresDoLivro.push_back(aut);
-                    } else {
-                        cout << "Autor com ID " << idAutor << " não encontrado!" << endl;
-                        falhaAutor = true;
-                        break; // Sai do loop se algum autor falha
+                    string nomeAutor;
+
+                    cout << "Digite o ID do autor: ";
+                    idAutor = getSafeIntegerInput();
+                    
+                    if(GerenciadorCadastro::verificaAutor(idAutor) != nullptr) {
+                        throw runtime_error("[ERRO] Autor com este ID já existe!");
                     }
+
+                    cout << "Digite o nome do autor: ";
+                    nomeAutor = getSafeStringInput();
+                    
+                    if(GerenciadorCadastro::buscarAutorPorNome(nomeAutor) != nullptr) {
+                        throw runtime_error("[ERRO] Autor com este nome já existe!");
+                    }
+
+                    Autor autor_obj = cadastraAutor(idAutor, nomeAutor);
+                    Autor* autor = new Autor(autor_obj);
+                    GerenciadorCadastro::adicionarAutor(autor); 
+                    cout << "\nAutor cadastrado com sucesso!\n";
+                    break;
                 }
 
-                if (falhaAutor || autoresDoLivro.empty()) { // Checa se algum autor falhou ou se não tem autores
-                    cout << "\nLivro não cadastrado: É necessário pelo menos um autor válido.\n";
-                    break; // Sai do case 1
+                case 3: { // CADASTRAR ALUNO
+                    int idUsuario;
+                    string nomeAluno;
+                    cout << "Digite o ID do aluno: ";
+                    idUsuario = getSafeIntegerInput();
+                    
+                    if(GerenciadorCadastro::verificaUsuario(idUsuario) != nullptr) {
+                        throw runtime_error("[ERRO] Usuário com o ID informado já existe!");
+                    } 
+                    
+                    Aluno aluno_obj = cadastraAluno(idUsuario, nomeAluno);
+                    Aluno* aluno = new Aluno(aluno_obj);
+                    GerenciadorCadastro::adicionarUsuario(aluno); 
+                    cout << "Aluno cadastrado com sucesso!" << endl;
+                    break;
                 }
 
+                case 4: { // CADASTRAR PROFESSOR
+                    int idUsuario;
+                    string nomeProfessor;
+                    cout << "Digite o ID do professor: ";
+                    idUsuario = getSafeIntegerInput();
+                    
+                    if(GerenciadorCadastro::verificaUsuario(idUsuario) != nullptr) {
+                        throw runtime_error("[ERRO] Usuário com o ID informado já existe!");
+                    }
+                    
+                    Professor professor_obj = cadastraProfessor(idUsuario, nomeProfessor);
+                    Professor* professor = new Professor(professor_obj);
+                    GerenciadorCadastro::adicionarUsuario(professor); 
+                    cout << "Professor cadastrado com sucesso!" << endl;
+                    break;
+                }
 
-                cout << "Número de páginas." << endl;
-                cin >> pag;
+                case 5: { // CADASTRAR EDITORA
+                    int idEditora;
+                    string nomeEditora;
 
-                Livro* livro = new Livro(c, t, e, p, *editora, a, 0, diasEmp, autoresDoLivro, 1, 1, pag);
-                // quantidadeExemplares inicializa em 0, é atualizado por Acervo::criarExemplaresParaLivro
+                    cout << "Digite o ID da editora: ";
+                    idEditora = getSafeIntegerInput();
+                    
+                    if(GerenciadorCadastro::verificaEditora(idEditora) != nullptr) {
+                        throw runtime_error("[ERRO] Editora com este ID já existe!");
+                    }
+                    
+                    Editora editora_obj = cadastraEditora(idEditora, nomeEditora);
+                    Editora* novaEditora = new Editora(editora_obj);
+                    GerenciadorCadastro::adicionarEditora(novaEditora); 
+                    cout << "\nEditora cadastrada com sucesso!\n";
+                    break;
+                }
 
-                Acervo::acrecentarLivro(livro);
-
-                // --- GERANDO OS EXEMPLARES ---
-                Acervo::criarExemplaresParaLivro(livro, qtdExe);
-
-                cout << "\nLivro cadastrado com sucesso!\n";
-
+                default:
+                    cout << "\nOpção inválida no menu de cadastro!" << endl;
+                }
                 break;
             }
 
-            case 2: {
-                int idAutor;
-                cout << "Digite o ID do autor: ";
-                cin >> idAutor;
-                Autor* aut = GerenciadorCadastro::verificaAutor(idAutor);
-                    if(aut != nullptr) {
-                        cout << "Autor com ID " << idAutor << " já existe!" << endl;
-                        break; // Sai do loop se algum autor falha
-                    } else {
-                        Autor autor_obj = cadastraAutor(idAutor);
-                        Autor* autor = new Autor(autor_obj);
-                        GerenciadorCadastro::adicionarAutor(autor); // Adiciona ao gerenciador
-                        cout << "\nAutor cadastrado com sucesso!\n";
-                        break;
-                    }
-            }
+            case 2: { // EDITAR LIVRO
+                int codigo;
+                cout << "\nCodigo do livro: ";
+                codigo = getSafeIntegerInput();
 
-            case 3:
-            {
-                int idUsuario;
-                cout << "Digite o ID do aluno: ";
-                cin >> idUsuario;
-                Usuario* user = GerenciadorCadastro::verificaUsuario(idUsuario);
-                    if(user != nullptr) {
-                        cout << "Usuário com ID " << idUsuario << " já existe!" << endl;
-                        break; // Sai do loop se algum usuário falha
-                    } else {
-                        Aluno aluno_obj = cadastraAluno(idUsuario);
-                        Aluno* aluno = new Aluno(aluno_obj);
-                        GerenciadorCadastro::adicionarUsuario(aluno); // Adicionado ao gerenciador
-
-                        cout << "Aluno cadastrado!" << endl;
-
-                        break;
-                    }
-            }
-
-            case 4:
-            {
-                int idUsuario;
-                cout << "Digite o ID do professor: ";
-                cin >> idUsuario;
-                Usuario* user = GerenciadorCadastro::verificaUsuario(idUsuario);
-                if(user != nullptr) {
-                    cout << "Usuário com ID " << idUsuario << " já existe!" << endl;
-                    break; // Sai do loop se algum usuário falha
-                }
-                else {
-                  Professor professor_obj = cadastraProfessor(idUsuario);
-                  Professor* professor = new Professor(professor_obj);
-                  GerenciadorCadastro::adicionarUsuario(professor); // Adicionado ao gerenciador
-
-                  cout << "Professor cadastrado!" << endl;
-
-                  break;
-                }
-            }
-
-            case 5: {
-                int idEditora;
-                cout << "Digite o ID da editora: ";
-                cin >> idEditora;
-                Editora* editora = GerenciadorCadastro::verificaEditora(idEditora);
-                if(editora != nullptr) {
-                    cout << "Editora com ID " << idEditora << " já existe!" << endl;
-                    break; // Sai do loop se alguma editora falha
-                }
-                else {
-                  Editora editora_obj = cadastraEditora(idEditora);
-                  Editora* editora = new Editora(editora_obj);
-                  GerenciadorCadastro::adicionarEditora(editora); // Adicionado ao gerenciador
-
-                  cout << "\nEditora cadastrada com sucesso!\n";
-
-                  break;
-                }
-            }
-
-            default:
-                cout << "\nOpcao invalida!" << endl;
-            }
-
-            break;
-        }
-
-        case 2: { // EDITAR LIVRO
-
-            int codigo;
-
-            cout << "\nCodigo do livro: ";
-            cin >> codigo;
-
-            Livro* livro = Acervo::buscarLivro(codigo);
-
-            if (livro == nullptr) {
-
-                cout << "\nLivro nao encontrado." << endl;
-
-            } else {
+                Livro* livro = Acervo::buscarLivro(codigo);
+                if (livro == nullptr) {
+                    throw runtime_error("[ERRO] Livro não encontrado.");
+                } 
 
                 string novoTitulo;
-
-                cin.ignore();
-
                 cout << "Novo titulo: ";
-
-                getline(cin, novoTitulo);
-
+                novoTitulo = getSafeStringInput();
                 livro->setTitulo(novoTitulo);
-
                 cout << "\nLivro atualizado com sucesso!" << endl;
-            }
-
-            break;
-        }
-
-        case 3: { // REMOVER LIVRO
-
-            int codigo;
-
-            cout << "\nCodigo do livro a remover: ";
-
-            cin >> codigo;
-
-            Acervo::removerLivroPorCodigo(codigo);
-
-            break;
-        }
-
-        case 4:
-        {           
-            int idReserva;
-            int dataReserva;
-            int dataRetirada;
-            int codigoLivro;
-            int idUsuario;
-
-            cout << "\n=== CRIAR RESERVA ===\n";
-
-            cout << "ID da reserva: ";
-            cin >> idReserva;
-
-            cout << "Data da reserva: ";
-            cin >> dataReserva;
-
-            cout << "Data para retirada: ";
-            cin >> dataRetirada;
-
-            cout << "ID do usuario: ";
-            cin >> idUsuario;
-
-            Usuario* usuario =
-                GerenciadorCadastro::verificaUsuario(idUsuario);
-
-            if(usuario == nullptr){
-
-                cout << "Usuario nao encontrado." << endl;
-
-                break;
-            }
-            else {
-              cout << "Usuário: " << usuario->getNome()  << endl;
-            }
-
-            cout << "Codigo do livro: ";
-            cin >> codigoLivro;
-
-            Livro* livro = Acervo::buscarLivro(codigoLivro);
-
-            if(livro == nullptr){
-
-                cout << "Livro nao encontrado." << endl;
-
                 break;
             }
 
-            // --- LOGICA PARA VERIFICAR DISPONIBILIDADE DE EXEMPLAR PARA RESERVA ---
-            ExemplarLivro* exemplarDisponivel = nullptr;
-            bool exemplarJaReservadoParaData = false;
+            case 3: { // REMOVER LIVRO
+                int codigo;
+                cout << "\nCodigo do livro a remover: ";
+                codigo = getSafeIntegerInput();
+                Acervo::removerLivroPorCodigo(codigo);
+                break;
+            }
 
-            for (ExemplarLivro* ex : Acervo::getListaExemplares()) { 
-                if (ex->getLivro() == livro) { 
-                    // Check if this specific exemplar is already reserved for the desired date
-                    bool isReserved = false;
-                    for (Reserva* r : reservas) {
-                        for (ItemReserva* item : r->getItems()) { 
-                            if (item->getExemplar() == ex && item->getDataDeRetirada() == dataRetirada) {
-                                isReserved = true;
-                                exemplarJaReservadoParaData = true; 
-                                break;
+            case 4: { // RESERVA
+                int idReserva, dataReserva, dataRetirada, codigoLivro, idUsuario;
+
+                cout << "\n=== CRIAR RESERVA ===\n";
+                cout << "ID da reserva: "; idReserva = getSafeIntegerInput();
+                cout << "Data da reserva: "; dataReserva = getSafeIntegerInput();
+                cout << "Data para retirada: "; dataRetirada = getSafeIntegerInput();
+                cout << "ID do usuario: "; idUsuario = getSafeIntegerInput();
+
+                Usuario* usuario = GerenciadorCadastro::verificaUsuario(idUsuario);
+                if(usuario == nullptr){
+                    throw runtime_error("[ERRO] Usuário não encontrado.");
+                }
+                cout << "Usuário: " << usuario->getNome()  << endl;
+
+                cout << "Codigo do livro: ";
+                codigoLivro = getSafeIntegerInput();
+
+                Livro* livro = Acervo::buscarLivro(codigoLivro);
+                if(livro == nullptr){
+                    throw runtime_error("[ERRO] Livro não encontrado.");
+                }
+
+                ExemplarLivro* exemplarDisponivel = nullptr;
+                bool exemplarJaReservadoParaData = false;
+
+                for (ExemplarLivro* ex : Acervo::getListaExemplares()) {
+                    if (ex->getLivro() == livro) {
+                        bool isReserved = false;
+                        for (Reserva* r : reservas) {
+                            for (ItemReserva* item : r->getItems()) {
+                                if (item->getExemplar() == ex && item->getDataDeRetirada() == dataRetirada) {
+                                    isReserved = true;
+                                    exemplarJaReservadoParaData = true;
+                                    break;
+                                }
                             }
+                            if (isReserved) break;
                         }
-                        if (isReserved) break;
-                    }
-
-                    if (!isReserved) {
-                        // This exemplar is available for reservation on this date
-                        exemplarDisponivel = ex;
-                        break; 
+                        if (!isReserved) {
+                            exemplarDisponivel = ex;
+                        }
                     }
                 }
+
+                if (exemplarDisponivel == nullptr) {
+                    if (exemplarJaReservadoParaData) {
+                        throw runtime_error("[ERRO] Nenhum exemplar disponível para a data informada (Já reservados).");
+                    } else {
+                        throw runtime_error("[ERRO] Nenhum exemplar disponível para este livro.");
+                    }
+                }
+
+                Reserva* reserva = new Reserva(idReserva, dataReserva, usuario);
+                ItemReserva* item = new ItemReserva(1, dataRetirada, exemplarDisponivel);
+
+                reserva->adicionarItem(item);
+                reservas.push_back(reserva);
+
+                cout << "\nReserva criada com sucesso para o exemplar " << exemplarDisponivel->getNroExemplar() << "!\n";
+                break;
             }
 
-            if (exemplarDisponivel == nullptr) {
-                if (exemplarJaReservadoParaData) {
-                    cout << "\nNenhum exemplar disponivel para reserva na data " << dataRetirada << ". Todos os exemplares ja estao reservados para essa data.\n";
-                } else {
-                    cout << "\nNenhum exemplar disponivel do livro '" << livro->getTitulo() << "' para reserva.\n";
+            case 5: { // EMPRÉSTIMO
+                int codigoLivro, idUsuario;
+                cout << "\nCRIAR EMPRESTIMO\n";
+                cout << "Codigo do livro: "; codigoLivro = getSafeIntegerInput();
+                cout << "ID do usuario: "; idUsuario = getSafeIntegerInput();
+
+                Livro* livro = Acervo::buscarLivro(codigoLivro);
+                Usuario* usuario = GerenciadorCadastro::verificaUsuario(idUsuario);
+
+                if (livro == nullptr || usuario == nullptr) {
+                    throw runtime_error("[ERRO] Livro ou Usuário não encontrados para efetuar empréstimo.");
                 }
-                break; 
+
+                GerenciadorEmprestimos::CriarEmprestimo(usuario, livro);
+                break;
             }
 
-            Reserva* reserva =
-                new Reserva(
-                    idReserva,
-                    dataReserva,
-                    usuario);
+            case 6: { // CONSULTAS
+                int opcConsulta;
+                exibirSubMenuConsultar();
+                opcConsulta = getSafeIntegerInput();
+                cout << endl;
 
-            ItemReserva* item =
-                new ItemReserva(
-                    1,
-                    dataRetirada,
-                    exemplarDisponivel); 
-
-            reserva->adicionarItem(item);
-
-            reservas.push_back(reserva);
-
-            cout << "\nReserva criada com sucesso para o exemplar " << exemplarDisponivel->getNroExemplar() << "!\n";
-
-            break;
-        }
-
-        case 5:
-        {           
-            int codigoLivro;
-            int idUsuario;
-
-            cout << "\nCRIAR EMPRESTIMO\n";
-
-            cout << "Codigo do livro: ";
-            cin >> codigoLivro;
-
-            cout << "ID do usuario: ";
-            cin >> idUsuario;
-
-            Livro* livro =
-                Acervo::buscarLivro(codigoLivro);
-
-            Usuario* usuario =
-                GerenciadorCadastro::verificaUsuario(idUsuario); 
-
-            GerenciadorEmprestimos::CriarEmprestimo(
-                usuario,
-                livro
-            );
-
-            break;
-        }
-
-        case 6: { // CONSULTAS
-
-            int opcConsulta;
-
-            exibirSubMenuConsultar(); 
-
-            cin >> opcConsulta;
-
-            cout << endl;
-
-            switch(opcConsulta) {
-
-            case 1:
-
-                Acervo::listarTodos();
-
-                break;
-
-            case 2:
-
-                for(Autor* autor : GerenciadorCadastro::getAutores()) {
-
-                    autor->exibirInformacoes();
-
-                    cout << endl;
-                }
-
-                break;
-
-            case 3:
-
-                for(Usuario* usuario : GerenciadorCadastro::getUsuarios()) { 
-
-                    usuario->exibirInformacoes();
-
-                    cout << endl;
-                }
-
-                break;
-
-            case 4: // Listar todas as Reservas
-            {
-                if(reservas.empty()){
-
-                    cout << "\nNenhuma reserva cadastrada." << endl;
-
-                } else {
-
-                    for(Reserva* reserva : reservas){
-
-                        reserva->exibirInformacoes();
-
+                switch(opcConsulta) {
+                case 1:
+                    Acervo::listarTodos();
+                    break;
+                case 2:
+                    for(Autor* autor : GerenciadorCadastro::getAutores()) {
+                        autor->exibirInformacoes();
                         cout << endl;
                     }
-                }
-
-                break;
-            }
-
-            case 5: // Reservas de um Usuario
-            {
-                int id;
-
-                cout << "\nDigite o ID do usuario: ";
-                cin >> id;
-
-                bool encontrou = false;
-
-                for(Reserva* r : reservas){
-
-                    if(r->getUsuario() != nullptr &&
-                       r->getUsuario()->getID() == id){
-
-                        r->exibirInformacoes();
-                        encontrou = true;
+                    break;
+                case 3:
+                    for(Usuario* usuario : GerenciadorCadastro::getUsuarios()) {
+                        usuario->exibirInformacoes();
+                        cout << endl;
                     }
+                    break;
+                case 4:
+                    if(reservas.empty()){
+                        cout << "\nNenhuma reserva cadastrada." << endl;
+                    } else {
+                        for(Reserva* reserva : reservas){
+                            reserva->exibirInformacoes();
+                            cout << endl;
+                        }
+                    }
+                    break;
+                case 5: {
+                    int id;
+                    cout << "\nDigite o ID do usuario: ";
+                    id = getSafeIntegerInput();
+                    bool encontrou = false;
+
+                    for(Reserva* r : reservas){
+                        if(r->getUsuario() != nullptr && r->getUsuario()->getID() == id){
+                            r->exibirInformacoes();
+                            encontrou = true;
+                        }
+                    }
+                    if(!encontrou){
+                        cout << "Nenhuma reserva encontrada para esse usuario." << endl;
+                    }
+                    break;
                 }
-
-                if(!encontrou){
-                    cout << "Nenhuma reserva encontrada para esse usuario." << endl;
+                case 6: {
+                    int id;
+                    cout << "\nDigite o ID do usuário: ";
+                    id = getSafeIntegerInput();
+                    GerenciadorEmprestimos::listarEmprestimosPorUsuario(id);
+                    break;
                 }
-
-                break;
-            }
-
-            case 6:
-            {
-                int id;
-                cout << "\nDigite o ID do usuário: ";
-                cin >> id;
-                GerenciadorEmprestimos::listarEmprestimosPorUsuario(id);
+                case 7:
+                    GerenciadorEmprestimos::listarTodosEmprestimosAtuais();
+                    break;
+                default:
+                    cout << "\nOpcao invalida!" << endl;
+                }
                 break;
             }
 
             case 7:
-            {
-                GerenciadorEmprestimos::listarTodosEmprestimosAtuais();
+                cout << "\nEncerrando sistema..." << endl;
                 break;
-            }
 
             default:
-
                 cout << "\nOpcao invalida!" << endl;
             }
 
-            break;
+        } 
+        catch (const runtime_error& e) {
+            cout << "\n----------------------------------------" << endl;
+            cout << e.what() << endl;
+            cout << "Retornando ao menu principal..." << endl;
+            cout << "----------------------------------------\n" << endl;
         }
 
-        case 7:
-            cout << "\nEncerrando sistema..." << endl;
-
-            break;
-
-        default:
-
-            cout << "\nOpcao invalida!" << endl;
-            break;
-        }
-
-    } while(opcao != 7); 
+    } while(opcao != 7);
 
     // Liberação de memória
-
     for(Autor* autor : GerenciadorCadastro::getAutores()) delete autor; 
-
     for(Usuario* usuario : GerenciadorCadastro::getUsuarios()) delete usuario; 
-
     for(Editora* editora : GerenciadorCadastro::getEditoras()) delete editora; 
-
     for(Livro* livro : Acervo::getListaLivros()) delete livro;
-
     for(ExemplarLivro* exemplar : Acervo::getListaExemplares()) delete exemplar;
-
-    for(Reserva* reserva : reservas)
-        delete reserva;
-
+    for(Reserva* reserva : reservas) delete reserva;
 
     return 0;
 }

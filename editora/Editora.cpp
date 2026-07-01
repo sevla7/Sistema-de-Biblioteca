@@ -48,18 +48,13 @@ void Editora::setEndereco(Endereco& endereco) {
 
 Editora::~Editora() {}
 
-Editora cadastraEditora(int idEditora) {
+Editora cadastraEditora(int idEditora, string nome) {
     Editora e;
-    // int id; // Removed redundant local variable
     string nome;
     string rua, bairro, cidade, estado, cep;
     int numero;
 
-    e.setId(idEditora); // Use the provided idEditora
-
-    cout << "Digite o nome da editora: ";
-    cin.ignore(); // Consume the newline character left by cin >> idEditora;
-    getline(cin, nome);
+    e.setId(idEditora); 
     e.setNome(nome);
 
     cout << "--- Dados do Endereço ---" << endl;
@@ -68,7 +63,7 @@ Editora cadastraEditora(int idEditora) {
 
     cout << "Número: ";
     cin >> numero;
-    cin.ignore(); // Consume the newline character
+    cin.ignore(); 
 
     cout << "Bairro: ";
     getline(cin, bairro);

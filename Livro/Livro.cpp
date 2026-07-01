@@ -170,3 +170,8 @@ Livro cadastraLivro() {
     // Implementação de cadastro de livro, se necessário
     return l;
 }
+
+// Overload the equality operator
+bool Livro::operator==(const Livro& other) const {
+    return (codigo == other.getCodigo()) || (titulo == other.getTitulo());
+}

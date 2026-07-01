@@ -26,6 +26,6 @@ class Editora {
          ~Editora();
 };
 
-Editora cadastraEditora(int idEditora);
+Editora cadastraEditora(int idEditora, string nome);
 
 #endif

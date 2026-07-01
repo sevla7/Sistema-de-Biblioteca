@@ -47,7 +47,7 @@ void Professor::exibirInformacoes() const {
          << endl;
 }
 
-Professor cadastraProfessor(int idProf) {
+Professor cadastraProfessor(int idProf, string nome) {
 
     Professor p;
 
@@ -57,10 +57,6 @@ Professor cadastraProfessor(int idProf) {
     int qtdTurmas;
 
     p.setID(idProf); // Use the provided idProf
-
-    cout << "Digite o nome: ";
-    cin.ignore();
-    getline(cin, nome);
     p.setNome(nome);
 
     cout << "Digite o departamento: ";

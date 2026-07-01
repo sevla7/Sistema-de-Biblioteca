@@ -48,6 +48,15 @@ Livro* Acervo::buscarLivro(int codigo) {
     return nullptr;
 }
 
+Livro* Acervo::buscarLivroPorTitulo(const std::string& titulo) {
+    for (Livro* livro : livros) {
+        if (livro->getTitulo() == titulo) {
+            return livro;
+        }
+    }
+    return nullptr;
+}
+
 void Acervo::removerLivroPorCodigo(int codigo) { 
     for(auto it = livros.begin(); it != livros.end(); ++it){
         if((*it)->getCodigo() == codigo){

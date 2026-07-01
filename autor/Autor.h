@@ -32,5 +32,5 @@ public:
     void setCodigo(const int c);
 };
 
-Autor cadastraAutor(int cod);
+Autor cadastraAutor(int cod, string nome);
 #endif

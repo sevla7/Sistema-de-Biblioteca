@@ -72,6 +72,8 @@ class Livro {
 
         bool estaDisponivel();
 
+        bool operator==(const Livro& other) const;
+
 };
 
 Livro cadastraLivro();
