@@ -49,9 +49,9 @@ void Reserva::adicionarItem(ItemReserva* novoItem) {
 }
 
 void Reserva::exibirInformacoes() {
-    cout << "====INFORMAÇÕES DA RESERVA====" << endl;
+    cout << "====INFORMACOES DA RESERVA====" << endl;
     cout << "ID: " << ID << endl;
-    cout << "Data de Realização: " << dataRealizacao << endl;
+    cout << "Data de Realizacao: " << dataRealizacao << endl;
     cout << "Usuario: ";
 
     if(usuario != nullptr){

@@ -25,6 +25,10 @@ public:
     void setDepartamento(string dep);
 
     void exibirInformacoes() const override;
+    
+    // Implementacao dos metodos abstratos
+    int getDiasEmprestimoPermitido() const override;
+    bool podeRealizarEmprestimo() const override;
 };
 
 Aluno cadastraAluno(int idAluno, string nome);

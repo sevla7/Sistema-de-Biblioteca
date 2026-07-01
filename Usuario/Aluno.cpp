@@ -65,3 +65,12 @@ Aluno cadastraAluno(int idAluno, string nome) {
 
     return a;
 }
+
+// Implementacao dos metodos abstratos
+int Aluno::getDiasEmprestimoPermitido() const {
+    return 7; // Alunos tem 7 dias de emprestimo
+}
+
+bool Aluno::podeRealizarEmprestimo() const {
+    return this->getStatus() == StatusUsuario::HABILITADO;
+}

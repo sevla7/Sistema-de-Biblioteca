@@ -15,10 +15,10 @@ Editora::Editora(int id, string nome, Endereco& endereco) {
 Editora::Editora() : id(0), nome("") {}
 
 void Editora::exibirInformacoes() {
-    cout << "====INFORMAÇÕES DA EDITORA====" << endl;
+    cout << "====INFORMACOES DA EDITORA====" << endl;
     cout << "ID: " << id << endl;
     cout << "Nome: " << nome << endl;
-    cout << "Endereço: " << endereco.getRua() << ", " << endereco.getNumero() << endl;
+    cout << "Endereco: " << endereco.getRua() << ", " << endereco.getNumero() << endl;
     cout << "" << endl;
 };
 
@@ -56,11 +56,11 @@ Editora cadastraEditora(int idEditora, string nome) {
     e.setId(idEditora); 
     e.setNome(nome);
 
-    cout << "--- Dados do Endereço ---" << endl;
+    cout << "--- Dados do Endereco ---" << endl;
     cout << "Rua: ";
     getline(cin, rua);
 
-    cout << "Número: ";
+    cout << "Numero: ";
     cin >> numero;
     cin.ignore(); 
 

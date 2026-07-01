@@ -9,8 +9,8 @@ using std::vector;
 class ExemplarLivro {
     private:
         int nroExemplar;
-        StatusEmprestimo status; // Associação com a classe StatusEmprestimo
-        Livro* livro; // Associação com a classe Livro
+        StatusEmprestimo status; // Associacao com a classe StatusEmprestimo
+        Livro* livro; // Associacao com a classe Livro
 
     public:
         ExemplarLivro(int c, Livro* l);

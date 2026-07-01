@@ -1,14 +1,14 @@
 #pragma once
 
-class ExemplarLivro; // Declaração antecipada para evitar dependência circular
+class ExemplarLivro; // Declaracao antecipada para evitar dependencia circular
 class Emprestimo; 
 
 class ItemEmprestimo {
     private:
        int dataParaDevolucao;
        int dataQueFoiDevolvido;  
-       Emprestimo* emprestimo; // Associação com a classe Emprestimo
-       ExemplarLivro* exemplar; // Associação com a classe ExemplarLivro
+       Emprestimo* emprestimo; // Associacao com a classe Emprestimo
+       ExemplarLivro* exemplar; // Associacao com a classe ExemplarLivro
 
     public:
         ItemEmprestimo(int dataParaDevolucao, int dataQueFoiDevolvido, ExemplarLivro *exemplar, Emprestimo *emprestimo);

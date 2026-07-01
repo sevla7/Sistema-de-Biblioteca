@@ -18,6 +18,10 @@ class Usuario {
        virtual ~Usuario();
 
        virtual void exibirInformacoes() const;
+       
+       // Metodo abstrato para polimorfismo (usado em Emprestimo e Reserva)
+       virtual int getDiasEmprestimoPermitido() const = 0;
+       virtual bool podeRealizarEmprestimo() const = 0;
 
        // Getters e Setters
        int getID() const;
@@ -30,6 +34,7 @@ class Usuario {
 
 };
 
-Usuario cadastraUsuario(int idUsuario);
+// Nota: Usuario e agora uma classe abstrata e nao pode ser instanciada diretamente
+// Uso Aluno ou Professor
 
 #endif

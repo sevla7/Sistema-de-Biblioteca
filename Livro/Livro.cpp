@@ -137,15 +137,15 @@ void Livro::setNroPaginas(const int n) {
 
 
 void Livro::exibirInformacoes() {
-    cout << "====INFORMAÇÕES DO LIVRO====\n";
-    cout << "Código: " << codigo << "\n";
-    cout << "Título: " << titulo << "\n";
-    cout << "Edição: " << edicao << "\n";
-    cout << "Preço: " << preco << "\n";
+    cout << "====INFORMACOES DO LIVRO====\n";
+    cout << "Codigo: " << codigo << "\n";
+    cout << "Titulo: " << titulo << "\n";
+    cout << "Edicao: " << edicao << "\n";
+    cout << "Preco: " << preco << "\n";
     cout << "Editora: " << editora.getNome() << "\n";
     cout << "Ano: " << ano << "\n";
     cout << "Quantidade de Exemplares: " << quantidadeExemplares << "\n";
-    cout << "Dias de Empréstimo Permitidos: " << nroDiasPermitidoEmprestimo << "\n";
+    cout << "Dias de Emprestimo Permitidos: " << nroDiasPermitidoEmprestimo << "\n";
     cout << "Autores: ";
     if (autores.empty()) {
         cout << "Nenhum autor cadastrado.\n";
@@ -157,7 +157,7 @@ void Livro::exibirInformacoes() {
     }
     cout << "Status Agora: " << statusAgora << "\n";
     cout << "Status Futuro: " << statusFuturo << "\n";
-    cout << "Número de Páginas: " << nroPaginas << "\n";
+    cout << "Numero de Paginas: " << nroPaginas << "\n";
     cout << "==============================\n";
 }
 
@@ -167,7 +167,7 @@ bool Livro::estaDisponivel() {
 
 Livro cadastraLivro() {
     Livro l;
-    // Implementação de cadastro de livro, se necessário
+    // Implementacao de cadastro de livro, se necessario
     return l;
 }
 

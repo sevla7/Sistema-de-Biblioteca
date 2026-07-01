@@ -31,10 +31,10 @@ void ExemplarLivro::setLivro(Livro* l) {
     this->livro = l;
 }
 void ExemplarLivro::exibirInformacoes() {
-    std::cout << "Número do exemplar: " << nroExemplar << std::endl;
+    std::cout << "Numero do exemplar: " << nroExemplar << std::endl;
     if (livro != nullptr) {
-        std::cout << "Título do livro: " << livro->getTitulo() << std::endl;
+        std::cout << "Titulo do livro: " << livro->getTitulo() << std::endl;
     } else {
-        std::cout << "Livro não associado." << std::endl;
+        std::cout << "Livro nao associado." << std::endl;
     }
 }

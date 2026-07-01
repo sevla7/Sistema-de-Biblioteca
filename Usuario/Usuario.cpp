@@ -10,7 +10,7 @@ Usuario::Usuario() : id (0), nome(""), status(StatusUsuario::NAO_DEFINIDO) {}
 Usuario::~Usuario() {}
 
 void Usuario::exibirInformacoes() const {
-    cout << "====INFORMAÇÕES DO USUÁRIO====" << endl;
+    cout << "====INFORMACOES DO USUARIO====" << endl;
     cout << "ID: " << id << endl;
     cout << "Nome: " << nome << endl;
     cout << "Status: " << statusToString(status) << endl;
@@ -38,23 +38,4 @@ void Usuario::setNome(const string nome) {
 
 void Usuario::setStatus(const StatusUsuario& status) {
     this->status = status;
-}
-
-Usuario cadastraUsuario(int idUsuario){
-
-  Usuario u;
-
-  // int id; //codigo // Removed redundant local variable
-  string n; //nome
-
-  u.setID(idUsuario); // Use the provided idUsuario
-
-  cout << "Digite o nome." << endl;
-  cin.ignore();
-  getline(cin, n);
-  u.setNome(n);
-
-  u.setStatus(StatusUsuario::HABILITADO);
-
-  return u;
 }

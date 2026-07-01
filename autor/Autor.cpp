@@ -12,7 +12,7 @@ void Autor::adicionarLivro(Livro* livro) {
 }
 
 void Autor::exibirInformacoes() {
-    cout << "====INFORMAÇÕES DO AUTOR====" << endl;
+    cout << "====INFORMACOES DO AUTOR====" << endl;
     cout << "Autor: " << nome << " (Cod: " << codigo << ")" << endl;
     cout << "Livros escritos: " << livros.size();
     cout << endl;

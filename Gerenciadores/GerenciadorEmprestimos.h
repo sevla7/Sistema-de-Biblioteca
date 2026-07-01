@@ -22,12 +22,15 @@ public:
     GerenciadorEmprestimos(vector<Emprestimo*> emprestimos);
 
     // Getter e Setter atualizados
-    vector<Emprestimo*> getEmprestimos() const;
+    static const vector<Emprestimo*>& getEmprestimos();
     static void setEmprestimos(vector<Emprestimo*> emprestimos);
 
     static void listarTodosEmprestimosAtuais();
     static void CriarEmprestimo(Usuario* usuario, Livro* livroDesejado);
-    static void listarEmprestimosPorUsuario(int idUsuario); 
+    static void listarEmprestimosPorUsuario(int idUsuario);
+    static bool devolverEmprestimo(int idUsuario, int codigoLivro, int dataDevolucao);
+    static Emprestimo* buscarEmprestimoPorId(int idEmprestimo);
+    static bool devolverEmprestimoPorId(int idEmprestimo, int dataDevolucao);
 };
 
 #endif

@@ -68,3 +68,12 @@ Professor cadastraProfessor(int idProf, string nome) {
 
     return p;
 }
+
+// Implementacao dos metodos abstratos
+int Professor::getDiasEmprestimoPermitido() const {
+    return 14; // Professores tem 14 dias de emprestimo
+}
+
+bool Professor::podeRealizarEmprestimo() const {
+    return this->getStatus() == StatusUsuario::HABILITADO;
+}

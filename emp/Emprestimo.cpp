@@ -1,8 +1,11 @@
 #include "..\emp\Emprestimo.h"
 #include "..\Usuario\Usuario.h"
 #include "..\Livro\Livro.h"
+#include "..\ExemplarLivro\ExemplarLivro.h"
 using std::cout;
 using std::endl;
+
+int Emprestimo::nextId = 1;
 
 Emprestimo::Emprestimo(
     const int dataDeRetirada,
@@ -10,7 +13,9 @@ Emprestimo::Emprestimo(
     const int DataDevolucao,
     const int status,
     Usuario* usuario,
-    Livro* livro) {
+    Livro* livro,
+    ExemplarLivro* exemplar,
+    int id) {
 
     this->dataDeRetirada = dataDeRetirada;
     this->DataPrevistaDevolucao = DataPrevistaDevolucao;
@@ -18,6 +23,8 @@ Emprestimo::Emprestimo(
     this->status = status;
     this->usuario = usuario;
     this->livro = livro;
+    this->exemplar = exemplar;
+    if (id != 0) this->id = id; else this->id = nextId++;
 }
 
 Emprestimo::Emprestimo() {
@@ -26,6 +33,9 @@ Emprestimo::Emprestimo() {
     this->DataDevolucao = 0;
     this->status = 0;
     this->usuario = nullptr;
+    this->livro = nullptr;
+    this->exemplar = nullptr;
+    this->id = nextId++;
 }
 
 int Emprestimo::getDataDeRetirada() const {
@@ -44,12 +54,20 @@ int Emprestimo::getStatus() const {
     return this->status;
 }
 
-Usuario Emprestimo::getUsuario() const {
-    return *(this->usuario);
+Usuario* Emprestimo::getUsuario() const {
+    return this->usuario;
 }
 
 Livro* Emprestimo::getLivro() const {
     return livro;
+}
+
+ExemplarLivro* Emprestimo::getExemplar() const {
+    return exemplar;
+}
+
+int Emprestimo::getId() const {
+    return id;
 }
 
 void Emprestimo::setDataDeRetirada(const int dataDeRetirada) {
@@ -68,12 +86,21 @@ void Emprestimo::setStatus(const int status) {
     this->status = status;
 }
 
-void Emprestimo::setUsuario(const Usuario& usuario) {
-    *(this->usuario) = usuario;
+void Emprestimo::setUsuario(Usuario* usuario) {
+    this->usuario = usuario;
+}
+
+void Emprestimo::setExemplar(ExemplarLivro* exemplar) {
+    this->exemplar = exemplar;
+}
+
+void Emprestimo::setId(int id) {
+    this->id = id;
 }
 
 void Emprestimo::exibirInformacoes() {
-    cout << "====INFORMAÇÕES DO EMPRÉSTIMO====" << endl;
+    cout << "====INFORMACOES DO EMPRESTIMO====" << endl;
+    cout << "ID do Emprestimo: " << this->id << endl;
     cout << "Data de Retirada: " << this->dataDeRetirada << endl;
     cout << "Data Prevista de Devolucao: " << this->DataPrevistaDevolucao << endl;
     cout << "Data de Devolucao: " << this->DataDevolucao << endl;

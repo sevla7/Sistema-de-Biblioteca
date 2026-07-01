@@ -31,8 +31,8 @@ void ItemReserva::setExemplar(ExemplarLivro* exemplar) {
 }
 
 void ItemReserva::exibirInformacoes() {
-    cout << "====INFORMAÇÕES DO ITEM RESERVA====" << endl;
-    cout << "Nº do Item: " << nroDoItem << endl;
+    cout << "====INFORMACOES DO ITEM RESERVA====" << endl;
+    cout << "No do Item: " << nroDoItem << endl;
     cout << "Data de Retirada: " << dataDeRetirada << endl;
     cout << "Livro: ";
     if (this->exemplar != nullptr) {

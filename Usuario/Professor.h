@@ -26,6 +26,10 @@ public:
     void setQuantidadeTurmas(int quantidadeTurmas);
 
     void exibirInformacoes() const override;
+    
+    // Implementacao dos metodos abstratos
+    int getDiasEmprestimoPermitido() const override;
+    bool podeRealizarEmprestimo() const override;
 };
 
 Professor cadastraProfessor(int idProf, string nome);

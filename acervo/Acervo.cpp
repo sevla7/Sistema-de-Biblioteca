@@ -12,13 +12,31 @@ void Acervo::acrecentarLivro(Livro* livro) {
 }
 
 void Acervo::removerLivro(Livro* livro) { 
+    if (livro == nullptr) {
+        return;
+    }
+
     livros.erase(std::remove(livros.begin(), livros.end(), livro), livros.end());
+
+    for (auto it = listaExemplares.begin(); it != listaExemplares.end();) {
+        if ((*it)->getLivro() == livro) {
+            delete *it;
+            it = listaExemplares.erase(it);
+        } else {
+            ++it;
+        }
+    }
 }
 
-void Acervo::listarTodos() { 
+void Acervo::listarTodos() {
+    if (livros.empty()) {
+        cout << "\nNenhum livro cadastrado no acervo." << endl;
+        return;
+    }
+    
+    cout << "\n========== LIVROS CADASTRADOS ==========" << endl;
     for (const auto& livro : livros) {
         livro->exibirInformacoes();
-        cout << "" << endl;
     }
 }
 
@@ -32,7 +50,7 @@ void Acervo::LivrosDisponiveis() {
 
 void Acervo::LivrosIndisponiveis() { 
     for (const auto& livro : livros) {
-        // Adicionado o '!' para negar a condição
+        // Adicionado o '!' para negar a condicao
         if (!livro->estaDisponivel()) {
             livro->exibirInformacoes();
         }
@@ -58,10 +76,21 @@ Livro* Acervo::buscarLivroPorTitulo(const std::string& titulo) {
 }
 
 void Acervo::removerLivroPorCodigo(int codigo) { 
-    for(auto it = livros.begin(); it != livros.end(); ++it){
-        if((*it)->getCodigo() == codigo){
-            delete *it;
+    for (auto it = livros.begin(); it != livros.end(); ++it) {
+        if ((*it)->getCodigo() == codigo) {
+            Livro* livroRemovido = *it;
             livros.erase(it);
+
+            for (auto exemplarIt = listaExemplares.begin(); exemplarIt != listaExemplares.end();) {
+                if ((*exemplarIt)->getLivro() == livroRemovido) {
+                    delete *exemplarIt;
+                    exemplarIt = listaExemplares.erase(exemplarIt);
+                } else {
+                    ++exemplarIt;
+                }
+            }
+
+            delete livroRemovido;
             cout << "Livro removido com sucesso." << endl;
             return;
         }
@@ -71,7 +100,7 @@ void Acervo::removerLivroPorCodigo(int codigo) {
 
 void Acervo::criarExemplaresParaLivro(Livro* livro, int quantidade) {
     if (livro == nullptr) {
-        cout << "Erro: Livro inválido para criar exemplares." << endl;
+        cout << "Erro: Livro invalido para criar exemplares." << endl;
         return;
     }
     for (int i = 0; i < quantidade; ++i) {

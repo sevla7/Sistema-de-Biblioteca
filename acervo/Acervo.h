@@ -4,7 +4,7 @@
 #include "..\Livro\Livro.h"
 #include "..\ExemplarLivro\ExemplarLivro.h"
 #include <vector>
-#include <algorithm> // Necessário para o std::remove
+#include <algorithm> // Necessario para o std::remove
 
 class Acervo {
     private:
@@ -27,5 +27,11 @@ class Acervo {
         static const std::vector<ExemplarLivro*>& getListaExemplares(); // Getter for private listaExemplares
         static const std::vector<Livro*>& getListaLivros(); // New getter for private livros
 };
+
+// Operador global para permitir sintaxe: Acervo += livro
+inline Acervo& operator+=(Acervo& acervo, Livro* livro) {
+    acervo.acrecentarLivro(livro);
+    return acervo;
+}
 
 #endif
