@@ -19,6 +19,7 @@ class Acervo {
         static void LivrosIndisponiveis();
 
         static Livro* buscarLivro(int codigo);
+        static Livro* buscarLivroPorTitulo(const std::string& titulo);
         static void removerLivroPorCodigo(int codigo);
 
         static void criarExemplaresParaLivro(Livro* livro, int quantidade); // Renamed and added parameters

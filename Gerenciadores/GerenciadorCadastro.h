@@ -20,7 +20,12 @@ public:
     static const std::vector<Usuario*>& getUsuarios();
     static Editora* verificaEditora(int idBuscado); 
     static Autor* verificaAutor(int idBuscado); 
-    static Usuario* verificaUsuario(int idBuscado);      
+    static Usuario* verificaUsuario(int idBuscado);
+    
+    // New methods to search by name/title
+    static Autor* buscarAutorPorNome(const std::string& nomeBuscado);
+    static Editora* buscarEditoraPorNome(const std::string& nomeBuscado);
+    static Usuario* buscarUsuarioPorNome(const std::string& nomeBuscado);
 
     // Added methods to manage the static vectors
     static void adicionarEditora(Editora* editora);

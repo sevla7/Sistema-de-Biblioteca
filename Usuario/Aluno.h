@@ -27,6 +27,6 @@ public:
     void exibirInformacoes() const override;
 };
 
-Aluno cadastraAluno(int idAluno);
+Aluno cadastraAluno(int idAluno, string nome);
 
 #endif
