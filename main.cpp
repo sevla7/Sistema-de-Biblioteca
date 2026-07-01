@@ -153,15 +153,23 @@ int main() {
 
                 case 2: { // CADASTRAR AUTOR
                     int idAutor;
+                    string nomeAutor;
+
                     cout << "Digite o ID do autor: ";
                     idAutor = getSafeIntegerInput();
                     
-                    Autor* aut = GerenciadorCadastro::verificaAutor(idAutor);
-                    if(aut != nullptr) {
-                        throw runtime_error("[ERRO] Autor com o ID informado já existe!");
-                    } 
+                    if(GerenciadorCadastro::verificaAutor(idAutor) != nullptr) {
+                        throw runtime_error("[ERRO] Autor com este ID já existe!");
+                    }
+
+                    cout << "Digite o nome do autor: ";
+                    nomeAutor = getSafeStringInput();
                     
-                    Autor autor_obj = cadastraAutor(idAutor);
+                    if(GerenciadorCadastro::buscarAutorPorNome(nomeAutor) != nullptr) {
+                        throw runtime_error("[ERRO] Autor com este nome já existe!");
+                    }
+
+                    Autor autor_obj = cadastraAutor(idAutor, nomeAutor);
                     Autor* autor = new Autor(autor_obj);
                     GerenciadorCadastro::adicionarAutor(autor); 
                     cout << "\nAutor cadastrado com sucesso!\n";
@@ -170,15 +178,15 @@ int main() {
 
                 case 3: { // CADASTRAR ALUNO
                     int idUsuario;
+                    string nomeAluno;
                     cout << "Digite o ID do aluno: ";
                     idUsuario = getSafeIntegerInput();
                     
-                    Usuario* user = GerenciadorCadastro::verificaUsuario(idUsuario);
-                    if(user != nullptr) {
+                    if(GerenciadorCadastro::verificaUsuario(idUsuario) != nullptr) {
                         throw runtime_error("[ERRO] Usuário com o ID informado já existe!");
                     } 
                     
-                    Aluno aluno_obj = cadastraAluno(idUsuario);
+                    Aluno aluno_obj = cadastraAluno(idUsuario, nomeAluno);
                     Aluno* aluno = new Aluno(aluno_obj);
                     GerenciadorCadastro::adicionarUsuario(aluno); 
                     cout << "Aluno cadastrado com sucesso!" << endl;
@@ -187,15 +195,15 @@ int main() {
 
                 case 4: { // CADASTRAR PROFESSOR
                     int idUsuario;
+                    string nomeProfessor;
                     cout << "Digite o ID do professor: ";
                     idUsuario = getSafeIntegerInput();
                     
-                    Usuario* user = GerenciadorCadastro::verificaUsuario(idUsuario);
-                    if(user != nullptr) {
+                    if(GerenciadorCadastro::verificaUsuario(idUsuario) != nullptr) {
                         throw runtime_error("[ERRO] Usuário com o ID informado já existe!");
                     }
                     
-                    Professor professor_obj = cadastraProfessor(idUsuario);
+                    Professor professor_obj = cadastraProfessor(idUsuario, nomeProfessor);
                     Professor* professor = new Professor(professor_obj);
                     GerenciadorCadastro::adicionarUsuario(professor); 
                     cout << "Professor cadastrado com sucesso!" << endl;
@@ -204,15 +212,16 @@ int main() {
 
                 case 5: { // CADASTRAR EDITORA
                     int idEditora;
+                    string nomeEditora;
+
                     cout << "Digite o ID da editora: ";
                     idEditora = getSafeIntegerInput();
                     
-                    Editora* editora = GerenciadorCadastro::verificaEditora(idEditora);
-                    if(editora != nullptr) {
-                        throw runtime_error("[ERRO] Editora com o ID informado já existe!");
+                    if(GerenciadorCadastro::verificaEditora(idEditora) != nullptr) {
+                        throw runtime_error("[ERRO] Editora com este ID já existe!");
                     }
                     
-                    Editora editora_obj = cadastraEditora(idEditora);
+                    Editora editora_obj = cadastraEditora(idEditora, nomeEditora);
                     Editora* novaEditora = new Editora(editora_obj);
                     GerenciadorCadastro::adicionarEditora(novaEditora); 
                     cout << "\nEditora cadastrada com sucesso!\n";
